@@ -43,7 +43,7 @@
       }
     ]
   },
-  "openapi": "https://api.mymarky.ai/api/v1/openapi.json",
+  "openapi": "https://api.mymarky.ai/api/beta/openapi.json",
   "api": {
     "baseUrl": "https://api.mymarky.ai",
     "auth": {

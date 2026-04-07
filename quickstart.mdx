@@ -14,7 +14,7 @@ description: Generate your first post in 2 minutes
 Send your content and we'll create social posts from it:
 
 ```bash
-curl -X POST https://api.mymarky.ai/api/v1/posts/generate \
+curl -X POST https://api.mymarky.ai/api/beta/posts/generate \
   -H "Authorization: Bearer mk_live_your_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -39,7 +39,7 @@ Response:
 Generation takes 15-60 seconds. Poll the job endpoint:
 
 ```bash
-curl https://api.mymarky.ai/api/v1/jobs/abc123-def456 \
+curl https://api.mymarky.ai/api/beta/jobs/abc123-def456 \
   -H "Authorization: Bearer mk_live_your_key_here"
 ```
 
