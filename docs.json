@@ -16,32 +16,33 @@
     "name": "Dashboard",
     "url": "https://app.mymarky.ai"
   },
-  "tabs": [
-    {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
-  "navigation": [
-    {
-      "group": "Getting Started",
-      "pages": ["introduction", "authentication", "quickstart"]
-    },
-    {
-      "group": "API Reference",
-      "pages": [
-        {
-          "group": "Posts",
-          "pages": [
-            "api-reference/generate-posts",
-            "api-reference/get-job-status",
-            "api-reference/list-posts",
-            "api-reference/get-post"
-          ]
-        }
-      ]
-    }
-  ],
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": ["introduction", "authentication", "quickstart"]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Posts",
+            "pages": [
+              "api-reference/generate-posts",
+              "api-reference/get-job-status",
+              "api-reference/list-posts",
+              "api-reference/get-post"
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "openapi": "https://api.mymarky.ai/api/v1/openapi.json",
   "api": {
     "baseUrl": "https://api.mymarky.ai",
