@@ -51,8 +51,29 @@
           {
             "group": "Businesses",
             "pages": [
+              "api-reference/create-business",
               "api-reference/list-businesses",
-              "api-reference/get-business"
+              "api-reference/get-business",
+              "api-reference/update-business",
+              "api-reference/delete-business"
+            ]
+          },
+          {
+            "group": "Topics",
+            "pages": [
+              "api-reference/create-topic",
+              "api-reference/list-topics",
+              "api-reference/get-topic",
+              "api-reference/update-topic",
+              "api-reference/delete-topic"
+            ]
+          },
+          {
+            "group": "Library",
+            "pages": [
+              "api-reference/list-library",
+              "api-reference/get-library-file",
+              "api-reference/delete-library-file"
             ]
           },
           {
