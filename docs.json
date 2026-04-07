@@ -41,12 +41,26 @@
           {
             "group": "Posts",
             "pages": [
-              "api-reference/generate-posts",
-              "api-reference/get-job-status",
+              "api-reference/create-post",
               "api-reference/list-posts",
               "api-reference/get-post",
               "api-reference/update-post",
               "api-reference/schedule-post"
+            ]
+          },
+          {
+            "group": "Businesses",
+            "pages": [
+              "api-reference/list-businesses",
+              "api-reference/get-business"
+            ]
+          },
+          {
+            "group": "Webhooks",
+            "pages": [
+              "api-reference/create-webhook",
+              "api-reference/list-webhooks",
+              "api-reference/delete-webhook"
             ]
           }
         ]
