@@ -1,0 +1,87 @@
+---
+title: Go High Level
+description: Connect Marky to Go High Level for automated social content
+---
+
+<Info>
+  This guide covers API-based integration. If you're looking for an iframe embed,
+  that's not currently supported — the API is the recommended integration path.
+</Info>
+
+## Overview
+
+Use the Marky API to generate social posts from Go High Level workflows. When a
+client onboards, a blog publishes, or a campaign launches, GHL can trigger Marky
+to create on-brand social content automatically.
+
+## Setup
+
+### 1. Get your API key
+
+Create an API key in your [Marky dashboard](https://app.mymarky.ai) (Organization Settings > API Keys).
+
+### 2. Find your business ID
+
+Each GHL sub-account maps to a Marky workspace. Find the workspace ID in your
+dashboard URL: `app.mymarky.ai/businesses/{business_id}`
+
+### 3. Create a GHL workflow
+
+In Go High Level, create a new Workflow with an HTTP action:
+
+**Trigger:** Whatever event you want (new contact, blog published, campaign started)
+
+**Action:** Custom Webhook / HTTP Request
+
+```
+Method: POST
+URL: https://api.mymarky.ai/api/beta/posts/generate
+Headers:
+  Authorization: Bearer mk_live_your_key_here
+  Content-Type: application/json
+Body:
+{
+  "business_id": "your-workspace-id",
+  "custom_idea": "{{trigger.description}}",
+  "count": 3
+}
+```
+
+### 4. Poll for results (optional)
+
+The generate endpoint returns a job ID. If you need the results in the same workflow,
+add a polling loop:
+
+1. Wait 30 seconds
+2. GET `https://api.mymarky.ai/api/beta/jobs/{{job_id}}`
+3. If status is `pending`, go to step 1
+4. If status is `completed`, the posts are in `data`
+
+### 5. Auto-schedule (optional)
+
+To schedule posts automatically after generation:
+
+```
+Method: POST
+URL: https://api.mymarky.ai/api/beta/posts/{{post_id}}/schedule
+Headers:
+  Authorization: Bearer mk_live_your_key_here
+  Content-Type: application/json
+Body:
+{
+  "publish_at": "2026-04-15T14:00:00Z",
+  "publish_to": ["instagram", "facebook"]
+}
+```
+
+## Rate limits
+
+API access includes 100 requests/hour and 200 generated posts/month per organization.
+These limits apply across all workspaces in your org. If you need higher limits,
+contact support@mymarky.ai.
+
+## White-label agencies
+
+If you white-label GHL for your clients, each client's GHL sub-account should map
+to a separate Marky workspace. Use the same API key (org-scoped) but pass different
+`business_id` values per client.

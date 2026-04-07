@@ -24,6 +24,14 @@
           {
             "group": "Getting Started",
             "pages": ["introduction", "authentication", "quickstart"]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "guides/ai-agents",
+              "guides/zapier-make",
+              "guides/go-high-level"
+            ]
           }
         ]
       },

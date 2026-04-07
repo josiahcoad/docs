@@ -1,0 +1,87 @@
+---
+title: Zapier & Make
+description: Automate social post generation with Zapier or Make (Integromat)
+---
+
+## Overview
+
+Connect Marky to your automation stack. Common workflows:
+
+- **Blog published → social posts** — RSS trigger → Marky generates posts from the article
+- **New lead in CRM → welcome posts** — CRM trigger → Marky creates social content about your service
+- **Weekly content batch** — Schedule trigger → Marky generates a week of posts from your topics
+
+## Zapier setup
+
+### 1. Create a Zap with a Webhooks action
+
+Zapier doesn't have a native Marky integration (yet), so use the **Webhooks by Zapier** action.
+
+**Trigger:** Choose your trigger (RSS, Google Sheets, CRM, Schedule, etc.)
+
+**Action:** Webhooks by Zapier > Custom Request
+
+```
+Method: POST
+URL: https://api.mymarky.ai/api/beta/posts/generate
+Headers:
+  Authorization: Bearer mk_live_your_key_here
+  Content-Type: application/json
+Data:
+{
+  "business_id": "your-workspace-id",
+  "content": "{{trigger_content}}",
+  "count": 3
+}
+```
+
+### 2. Add a polling step (optional)
+
+Add a **Delay** step (60 seconds), then another **Webhooks > Custom Request**:
+
+```
+Method: GET
+URL: https://api.mymarky.ai/api/beta/jobs/{{job_id_from_step_1}}
+Headers:
+  Authorization: Bearer mk_live_your_key_here
+```
+
+## Make (Integromat) setup
+
+### 1. Create a scenario with an HTTP module
+
+**Trigger:** Your choice (RSS, Webhook, Schedule, etc.)
+
+**Action:** HTTP > Make a request
+
+| Field | Value |
+|-------|-------|
+| URL | `https://api.mymarky.ai/api/beta/posts/generate` |
+| Method | POST |
+| Headers | `Authorization: Bearer mk_live_your_key_here` |
+| Body type | Raw > JSON |
+| Body | `{"business_id":"...","content":"{{content}}","count":3}` |
+
+### 2. Parse the response
+
+Add a **JSON > Parse JSON** module to extract the `job_id`, then poll with another
+HTTP module until `status` is `completed`.
+
+## n8n setup
+
+Use the **HTTP Request** node with the same parameters as above. n8n's built-in
+polling and looping make it easy to wait for generation to complete.
+
+## Rate limits
+
+100 requests/hour, 200 generated posts/month per organization. Plan your automation
+frequency accordingly. A weekly batch of 10 posts uses 40 posts/month — well within limits.
+
+## Tips
+
+- **Use `custom_idea` for specific topics:** If your trigger provides a specific topic
+  or headline, use `custom_idea` instead of `content` to skip Marky's ideation step.
+- **Use `website_url` for blog-to-social:** Pass the blog URL directly and Marky will
+  scrape the content for context.
+- **Schedule in Marky, not your automation tool:** Use the `/posts/{id}/schedule`
+  endpoint to let Marky handle publishing at the right time for each platform.

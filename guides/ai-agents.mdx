@@ -1,0 +1,119 @@
+---
+title: AI Agents
+description: Use Claude Code, OpenClaw, or custom agents to manage social posts
+---
+
+## Overview
+
+AI coding agents can use the Marky API to generate and manage social posts as
+part of a larger workflow. Your agent sends content, reviews the results, edits
+captions, and schedules posts — all without opening a browser.
+
+## Claude Code example
+
+Add this to your agent's instructions or CLAUDE.md:
+
+```markdown
+## Social media posting
+
+To create social posts, use the Marky API:
+
+1. Generate: POST https://api.mymarky.ai/api/beta/posts/generate
+   - Header: Authorization: Bearer mk_live_YOUR_KEY
+   - Body: {"business_id": "YOUR_BIZ_ID", "custom_idea": "topic here", "count": 3}
+
+2. Poll: GET https://api.mymarky.ai/api/beta/jobs/{job_id}
+   - Wait until status is "completed"
+
+3. Review the returned posts and edit if needed:
+   PATCH https://api.mymarky.ai/api/beta/posts/{post_id}
+   Body: {"caption": "updated caption"}
+
+4. Schedule: POST https://api.mymarky.ai/api/beta/posts/{post_id}/schedule
+   Body: {"publish_at": "2026-04-15T14:00:00Z"}
+```
+
+Then ask your agent: "Create 3 social posts about our new product launch and schedule them for tomorrow at 2pm."
+
+## Python script
+
+```python
+import httpx
+import time
+
+API_KEY = "mk_live_your_key_here"
+BIZ_ID = "your-business-id"
+BASE = "https://api.mymarky.ai/api/beta"
+HEADERS = {"Authorization": f"Bearer {API_KEY}"}
+
+# 1. Generate
+resp = httpx.post(f"{BASE}/posts/generate", headers=HEADERS, json={
+    "business_id": BIZ_ID,
+    "custom_idea": "Why consistent social posting matters for small businesses",
+    "count": 2,
+})
+job_id = resp.json()["job_id"]
+
+# 2. Poll
+while True:
+    time.sleep(5)
+    result = httpx.get(f"{BASE}/jobs/{job_id}", headers=HEADERS).json()
+    if result["status"] != "pending":
+        break
+
+# 3. Review + edit
+for post in result["data"]:
+    print(f"Caption: {post['caption'][:100]}...")
+    # Edit if needed
+    httpx.patch(f"{BASE}/posts/{post['post_id']}", headers=HEADERS, json={
+        "caption": post["caption"] + "\n\n#SmallBusiness #SocialMedia"
+    })
+
+# 4. Schedule
+from datetime import datetime, timedelta, timezone
+publish_time = datetime.now(timezone.utc) + timedelta(days=1)
+for post in result["data"]:
+    httpx.post(f"{BASE}/posts/{post['post_id']}/schedule", headers=HEADERS, json={
+        "publish_at": publish_time.isoformat(),
+        "publish_to": ["instagram", "linkedin"]
+    })
+    publish_time += timedelta(hours=4)  # stagger posts
+```
+
+## cURL example
+
+```bash
+# Generate
+JOB=$(curl -s -X POST https://api.mymarky.ai/api/beta/posts/generate \
+  -H "Authorization: Bearer mk_live_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"business_id":"YOUR_BIZ_ID","custom_idea":"Spring sale announcement","count":1}' \
+  | jq -r '.job_id')
+
+# Poll (wait 60s then check)
+sleep 60
+curl -s https://api.mymarky.ai/api/beta/jobs/$JOB \
+  -H "Authorization: Bearer mk_live_YOUR_KEY" | jq .
+
+# Schedule
+POST_ID="the-post-id-from-above"
+curl -s -X POST https://api.mymarky.ai/api/beta/posts/$POST_ID/schedule \
+  -H "Authorization: Bearer mk_live_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"publish_at":"2026-04-15T14:00:00Z","publish_to":["facebook","instagram"]}'
+```
+
+## Rate limits
+
+100 requests/hour, 200 generated posts/month per organization. An agent generating
+5 posts daily uses ~150 posts/month. If polling every 5 seconds, a single generation
+job uses ~20 requests.
+
+## Tips
+
+- **Stagger scheduled times.** Don't schedule all posts at the same time. Space them
+  out by 2-4 hours for better engagement.
+- **Review before scheduling.** Have your agent print captions for approval before
+  scheduling, or build an approval step into your workflow.
+- **Use `content` for long-form input.** If your agent has a blog post or article,
+  pass it as `content`. Use `custom_idea` for short topic descriptions.
