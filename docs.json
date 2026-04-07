@@ -23,7 +23,7 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["introduction", "authentication", "quickstart"]
+            "pages": ["introduction", "authentication", "quickstart", "terms"]
           },
           {
             "group": "Integrations",
