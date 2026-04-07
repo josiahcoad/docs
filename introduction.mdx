@@ -1,0 +1,47 @@
+---
+title: Introduction
+description: Turn any content into social media posts with the Marky API
+---
+
+The Marky API lets you generate social media posts programmatically from your existing content. Send in a blog post, newsletter, or custom idea and get back visual, on-brand social posts ready for review.
+
+## What you can do
+
+- **Generate posts** from text content, website URLs, or custom ideas
+- **Poll for results** as posts are generated asynchronously
+- **List and retrieve posts** created through the API
+
+## How it works
+
+1. Create an API key in **Settings > Integrations** in your Marky dashboard
+2. Send a `POST` request with your content to `/api/v1/posts/generate`
+3. Poll the returned job ID until generation completes
+4. Review and approve the generated posts in your Marky queue
+
+Posts created via the API appear as drafts in your normal post queue. You review and schedule them the same way you would any other post.
+
+## Rate limits
+
+| Limit | Value |
+|-------|-------|
+| Requests per hour | 100 |
+| Posts per month | 200 |
+| Max posts per request | 10 |
+| Max API keys per org | 10 |
+
+## Base URL
+
+All API requests use the base URL:
+
+```
+https://api.mymarky.ai/api/v1
+```
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/authentication">
+    Set up your API key
+  </Card>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Generate your first post in 2 minutes
+  </Card>
+</CardGroup>

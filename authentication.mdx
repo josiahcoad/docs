@@ -1,0 +1,44 @@
+---
+title: Authentication
+description: Create and manage API keys
+---
+
+All API requests require a Bearer token in the `Authorization` header. API keys are org-scoped, meaning one key grants access to all businesses in your organization.
+
+## Create an API key
+
+1. Go to **Settings > Integrations** in your [Marky dashboard](https://app.mymarky.ai)
+2. Click **Create API Key**
+3. Give it a name (e.g., "n8n production", "Zapier")
+4. Copy the key immediately. It's only shown once.
+
+Your key looks like this:
+
+```
+mk_live_a1b2c3d4e5f6g7h8i9j0...
+```
+
+## Use your API key
+
+Include the key as a Bearer token in every request:
+
+```bash
+curl https://api.mymarky.ai/api/v1/posts \
+  -H "Authorization: Bearer mk_live_your_key_here" \
+  -H "Content-Type: application/json"
+```
+
+## Key security
+
+- Keys are hashed before storage. We cannot retrieve a lost key; generate a new one.
+- Revoke compromised keys immediately in Settings > Integrations.
+- Each org can have up to 10 active keys.
+- Use separate keys for separate integrations so you can revoke individually.
+
+## Error responses
+
+| Status | Meaning |
+|--------|---------|
+| `401` | Missing or invalid API key |
+| `403` | Business doesn't belong to your org |
+| `429` | Rate limit exceeded (check `Retry-After` header) |
