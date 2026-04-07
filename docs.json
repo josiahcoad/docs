@@ -81,7 +81,8 @@
             "pages": [
               "api-reference/create-webhook",
               "api-reference/list-webhooks",
-              "api-reference/delete-webhook"
+              "api-reference/delete-webhook",
+              "api-reference/list-webhook-deliveries"
             ]
           }
         ]

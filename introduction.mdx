@@ -9,22 +9,26 @@ description: Turn any content into social media posts with the Marky API
   Endpoints, request/response formats, and rate limits may change during beta.
 </Warning>
 
-The Marky API lets you generate social media posts programmatically from your existing content. Connect AI agents, automation platforms, or your own tools — send in a blog post, newsletter, or custom idea and get back visual, on-brand social posts ready for review.
+The Marky API gives you full control over your social media content pipeline. Create posts, manage businesses and topics, schedule publishing, and get notified via webhooks — all from code.
+
+Connect AI agents, automation platforms, or your own tools. Your agent creates the content, Marky handles scheduling and publishing to all your connected platforms.
 
 ## What you can do
 
-- **Generate posts** from text content, website URLs, or custom ideas
-- **Poll for results** as posts are generated asynchronously
-- **List and retrieve posts** created through the API
+- **Posts** — create, list, update, and schedule posts for publishing
+- **Businesses** — create and manage workspaces in your org
+- **Topics** — CRUD on content topics for each business
+- **Library** — browse and manage media files
+- **Webhooks** — get notified when posts are published
 
 ## How it works
 
 1. Create an API key in your [Marky dashboard](https://app.mymarky.ai) (Settings > API Keys section)
-2. Send a `POST` request with your content to `/api/beta/posts/generate`
-3. Poll the returned job ID until generation completes
-4. Review and approve the generated posts in your Marky queue
+2. List your businesses to get the workspace ID
+3. Create a post with a caption and target platforms
+4. Schedule it for publishing — Marky handles the rest
 
-Posts created via the API appear as drafts in your normal post queue. You review and schedule them the same way you would any other post.
+Posts created via the API appear in your normal post queue. You can review them in the dashboard or manage everything through the API.
 
 ## Rate limits
 
